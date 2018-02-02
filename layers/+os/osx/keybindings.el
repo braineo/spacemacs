@@ -48,6 +48,8 @@
                (when (member key-value allowed-values)
                  (setf (symbol-value internal-var) key-value))))
 
+    (when osx-swap-option-and-command
+        (cl-rotatef mac-command-modifier mac-option-modifier))
     (defun kbd-mac-command (keys)
       "Wraps `kbd' function with Mac OSX compatible Command-key (⌘).
 KEYS should be a string such as \"f\" which will be turned into values
@@ -57,7 +59,7 @@ KEYS with a string of \"C-f\" are also valid and will be turned into
 values such as \"H-C-f\".
 Returns nil if `mac-command-modifier' is set to `none' or something
 other than the three sane values listed above."
-      (let ((found (assoc mac-command-modifier
+      (let ((found (assoc (when osx-swap-option-and-command mac-option-modifier mac-command-modifier)
                           '((hyper . "H-")
                             (super . "s-")
                             (alt   . "A-")))))
